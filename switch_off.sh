@@ -21,7 +21,7 @@ AccessTokenResponse=$(curl -sSLkX GET "$BaseUrl$URL" \
     -H "sign: $AccessTokenSign")
 AccessToken=$(echo $AccessTokenResponse | sed "s/.*\"access_token\":\"//g"  |sed "s/\".*//g")
 
-# Send commands to turn ON the device
+# Send commands to turn OFF the device
 URL="/v1.0/devices/$DeviceID/commands"
 StringToSign="${ClientID}${AccessToken}${tuyatime}POST\n$(echo -n "$Commands" | openssl dgst -sha256 | sed "s/.*[ ]//g")\n\n${URL}"
 PostSign=$(printf $StringToSign | openssl sha256 -hmac  "$ClientSecret" | awk '{print toupper($0)}' | sed 's/^.*= //')
@@ -39,7 +39,7 @@ PostResponse=$(curl -sSLkX POST "$BaseUrl$URL" \
 timestamp=$(date '+%-I:%M%p 'on' %-m-%-d-%Y' | sed 's/AM/am/;s/PM/pm/')
 success=$(echo "$PostResponse" | grep -o '"success":[^,]*' | awk -F ':' '{print $2}')
 if [ "$success" = "true" ]; then
-    echo "Device turned ON successfully at $timestamp"
+    echo "Device turned OFF successfully at $timestamp"
 else
-    echo "Device failed to be turned ON at $timestamp"
+    echo "Device failed to be turned OFF at $timestamp"
 fi
