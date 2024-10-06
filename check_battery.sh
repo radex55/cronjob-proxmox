@@ -45,9 +45,11 @@ fi
 
 # charger terhubung ("Full")
 if [ "$CHARGER_STATUS" == "Full" ]; then
-
+          
     # Hapus marker smart switch file
-    rm "$MARKER_FILE_SWITCH"
+    if [ -f "$MARKER_FILE_SWITCH" ]; then
+        rm "$MARKER_FILE_SWITCH"
+    fi
 
     # Jalankan perintah bash
     /home/switch_off.sh
