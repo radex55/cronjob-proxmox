@@ -17,11 +17,21 @@ if [ "$CHARGER_STATUS" == "Charging" ] || [ "$CHARGER_STATUS" == "Full" ]; then
     crontab -l | grep -v "/home/cron_script.sh" | crontab -
 
     # Hapus marker file
-    rm "$MARKER_FILE"
-    rm "$MARKER_FILE_SD"
-    rm "$MARKER_FILE_FCM"
-    rm "$MARKER_FILE_SH_NOW"
+    if [ -f "$MARKER_FILE" ]; then
+        rm "$MARKER_FILE"
+    fi
+    if [ -f "$MARKER_FILE_SD" ]; then
+        rm "$MARKER_FILE_SD"
+    fi
+    if [ -f "$MARKER_FILE_FCM" ]; then
+        rm "$MARKER_FILE_FCM"
+    fi
+    if [ -f "$MARKER_FILE_SH_NOW" ]; then
+        rm "$MARKER_FILE_SH_NOW"
+    fi
 
     # Buat file marker smart switch
-    touch "$MARKER_FILE_SWITCH"
+    if [ ! -f "$MARKER_FILE_SWITCH" ]; then
+        touch "$MARKER_FILE_SWITCH"
+    fi
 fi
