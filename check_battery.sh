@@ -24,8 +24,8 @@ if [ "$CHARGER_STATUS" == "Full" ]; then
     /home/switch_off.sh
 fi
 
-# Jika kapasitas baterai di atas 92% maka turn off smart switch
-if [ "$BATTERY_CAPACITY" -gt 92 ] && [ "$CHARGER_STATUS" == "Charging" ]; then
+# Jika kapasitas baterai di atas 90% maka turn off smart switch
+if [ "$BATTERY_CAPACITY" -gt 90 ] && [ "$CHARGER_STATUS" == "Charging" ]; then
 
     # Hapus marker smart switch file
     if [ -f "$MARKER_FILE_SWITCH" ]; then
@@ -46,8 +46,8 @@ if [ "$BATTERY_CAPACITY" -gt 85 ] && [ -f "$MARKER_FILE_SWITCH" ]; then
     /home/switch_off.sh
 fi
 
-# Jika kapasitas baterai di bawah 61% turn on smart switch
-if [ "$BATTERY_CAPACITY" -lt 61 ] && [ ! -f "$MARKER_FILE_SWITCH" ] && [ "$CHARGER_STATUS" == "Discharging" ]; then
+# Jika kapasitas baterai di bawah 65% turn on smart switch
+if [ "$BATTERY_CAPACITY" -lt 65 ] && [ ! -f "$MARKER_FILE_SWITCH" ] && [ "$CHARGER_STATUS" != "Charging" ]; then
 
     # Buat file marker smart switch
     touch "$MARKER_FILE_SWITCH"
@@ -56,8 +56,20 @@ if [ "$BATTERY_CAPACITY" -lt 61 ] && [ ! -f "$MARKER_FILE_SWITCH" ] && [ "$CHARG
     /home/switch_on.sh
 fi
 
+# Jika kapasitas baterai di bawah 60% turn on smart switch
+if [ "$BATTERY_CAPACITY" -lt 60 ] && [ "$CHARGER_STATUS" != "Charging" ]; then
+
+    # Buat file marker smart switch
+    if [ ! -f "$MARKER_FILE_SWITCH" ]; then
+        touch "$MARKER_FILE_SWITCH"
+    fi
+
+    # Jalankan perintah
+    /home/switch_on.sh
+fi
+
 # Jika charger tidak terhubung dan kapasitas baterai di bawah 55% dan marker belum dibuat
-if [ "$CHARGER_STATUS" == "Discharging" ] && [ "$BATTERY_CAPACITY" -lt 55 ] && [ ! -f "$MARKER_FILE" ]; then
+if [ "$CHARGER_STATUS" != "Charging" ] && [ "$BATTERY_CAPACITY" -lt 55 ] && [ ! -f "$MARKER_FILE" ]; then
 
     # Buat file marker
     touch "$MARKER_FILE"
