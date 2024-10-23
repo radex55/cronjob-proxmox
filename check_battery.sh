@@ -47,7 +47,7 @@ if [ "$BATTERY_CAPACITY" -gt 85 ] && [ -f "$MARKER_FILE_SWITCH" ]; then
 fi
 
 # Jika kapasitas baterai di bawah 61% turn on smart switch
-if [ "$BATTERY_CAPACITY" -lt 61 ] && [ ! -f "$MARKER_FILE_SWITCH" ]; then
+if [ "$BATTERY_CAPACITY" -lt 61 ] && [ ! -f "$MARKER_FILE_SWITCH" ] && [ "$CHARGER_STATUS" == "Discharging" ]; then
 
     # Buat file marker smart switch
     touch "$MARKER_FILE_SWITCH"
